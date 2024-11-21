@@ -62,17 +62,8 @@
     <!-- Основной контент -->
     <main class="flex-grow p-8 bg-gray-50 ml-4 rounded-lg shadow-md">
         @yield('content')
+        {{ $slot ?? '' }}
     </main>
     @livewireScripts
-    <script>
-        document.addEventListener('livewire:load', () => {
-            console.log('Livewire загружен');
-            Livewire.on('logMessage', (message) => {
-                console.log('Сообщение из Livewire:', message);
-            });
-        });
-    </script>
-
-
 </body>
 </html>

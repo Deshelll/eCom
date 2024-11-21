@@ -10,4 +10,10 @@ class Card extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'description', 'image', 'price'];
+
+    public function tickets()
+    {
+        return $this->hasOne(Ticket::class, 'card_id');
+    }
+
 }

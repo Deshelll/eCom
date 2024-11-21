@@ -21,13 +21,12 @@
             z-index: -1;
         }
     </style>
-    @livewireStyles
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 <!-- Прозрачный контейнер для компонента -->
 <div class="w-full max-w-md mx-auto p-8 rounded-lg">
     @yield('content')
-</div>
 
+</div>
 </body>
 </html>

@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
 
-use App\Models\Card;
-use App\Http\Controllers\TicketController;
+use App\Livewire\Tickets;
+use App\Livewire\CheckoutForm;
 
 // Главная страница
-Route::get('/', [TicketController::class, 'index'])->name('home');
+Route::get('/', Tickets::class)->name('home');
 
 // Показ форм регистрации и входа через методы контроллеров
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -58,12 +58,16 @@ Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('l
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
 //карточки
-Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+Route::get('/tickets', Tickets::class)->name('tickets');
+
+//оплата
+//Route::get('/checkout/{card}', CheckoutForm::class)->name('checkout');
+Route::get('/checkout/{cardId}', CheckoutForm::class)->name('checkout');
 
 
-Route::get('/test-wire', function () {
-    return view('test-wire');
-});
+
+
+
 
 
 
