@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Order;
 use App\Models\OrderTicket;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -34,37 +35,29 @@ class PaymentPage extends Component
     {
         Log::info('Процесс оплаты начат.');
 
+        if (!Auth::check()) {
+            Log::error('Пользователь не авторизован.');
+            return redirect()->route('login')->with('error', 'Необходимо войти в систему.');
+        }
+
         // Валидация email
         $this->validate([
             'email' => 'required|email',
         ]);
 
         try {
-            // Создание заказа
+            // Создание заказа и привязка к текущему пользователю
             $order = Order::create([
                 'card_id' => $this->order['cardId'],
                 'tickets_count' => count($this->order['tickets']),
+                'user_id' => Auth::id(),
             ]);
 
-            Log::info('Заказ создан:', ['order_id' => $order->id]);
+            Log::info('Заказ создан:', ['order_id' => $order->id, 'user_id' => Auth::id()]);
 
             // Запись билетов в order_tickets
             foreach ($this->order['tickets'] as $ticket) {
-                Log::info('Добавление записи в order_tickets:', [
-                    'order_id' => $order->id,
-                    'name' => $ticket['name'],
-                    'email' => $ticket['email'] ?? null,
-                    'phone' => $ticket['phone'],
-                ]);
-
                 OrderTicket::create([
-                    'order_id' => $order->id,
-                    'name' => $ticket['name'],
-                    'email' => $ticket['email'] ?? null,
-                    'phone' => $ticket['phone'],
-                ]);
-
-                Log::info('Билет добавлен в order_tickets:', [
                     'order_id' => $order->id,
                     'name' => $ticket['name'],
                     'email' => $ticket['email'] ?? null,
@@ -74,7 +67,7 @@ class PaymentPage extends Component
 
             session()->forget('checkout');
             session()->flash('success', 'Ваш заказ успешно оплачен!');
-            return redirect()->route('tickets');
+            return redirect()->route('orders');
         } catch (\Exception $e) {
             Log::error('Ошибка при обработке заказа: ' . $e->getMessage());
             session()->flash('error', 'Произошла ошибка при обработке заказа.');

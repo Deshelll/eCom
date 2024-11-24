@@ -15,6 +15,7 @@ class Order extends Model
         'phone_number',
         'tickets_count',
         'additional_people',
+        'user_id',
     ];
 
     public function tickets()

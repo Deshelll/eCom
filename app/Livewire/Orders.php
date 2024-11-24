@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\Order;
 
@@ -11,9 +12,11 @@ class Orders extends Component
 
     public function mount()
     {
-        // Получаем оплаченные заказы
-        $this->orders = Order::with(['tickets', 'card'])->get();
+        $this->orders = Order::with(['tickets', 'card'])
+            ->where('user_id', Auth::id())
+            ->get();
     }
+
 
     public function render()
     {
