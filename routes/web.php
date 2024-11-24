@@ -9,6 +9,7 @@ use App\Http\Controllers\SupportController;
 
 use App\Livewire\Tickets;
 use App\Livewire\CheckoutForm;
+use App\Livewire\PaymentPage;
 
 // Главная страница
 Route::get('/', Tickets::class)->name('home');
@@ -41,9 +42,8 @@ Route::get('/rental', function () {
     return view('rental');
 })->name('rental');
 
-Route::get('/orders', function () {
-    return view('orders');
-})->name('orders');
+Route::get('/orders', \App\Livewire\Orders::class)->name('orders');
+
 Route::middleware('auth')->group(function () {
     Route::get('/support', function () {
         return view('support');
@@ -60,14 +60,8 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 //карточки
 Route::get('/tickets', Tickets::class)->name('tickets');
 
-//оплата
-//Route::get('/checkout/{card}', CheckoutForm::class)->name('checkout');
+//ввод данных для покупки билетов
 Route::get('/checkout/{cardId}', CheckoutForm::class)->name('checkout');
 
-
-
-
-
-
-
-
+//оплата
+Route::get('/payment', PaymentPage::class)->name('payment');

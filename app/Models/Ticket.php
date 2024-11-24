@@ -15,11 +15,18 @@ class Ticket extends Model
         'price',
         'total_tickets',
         'available_tickets',
-        'image'
+        'image',
     ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class, 'order_tickets')
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 }

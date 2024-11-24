@@ -52,10 +52,11 @@ class TicketModal extends Component
     public function goToCheckout()
     {
         if (!isset($this->cardId)) {
+            Log::error('Card ID not set in goToCheckout.');
             session()->flash('error', 'ID карточки не найден.');
             return;
         }
-
+        Log::info('Redirecting to checkout with cardId: ' . $this->cardId);
         return redirect()->route('checkout', ['cardId' => $this->cardId]);
     }
 

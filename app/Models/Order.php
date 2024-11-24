@@ -12,18 +12,19 @@ class Order extends Model
     protected $fillable = [
         'card_id',
         'full_name',
-        'age',
         'phone_number',
         'tickets_count',
         'additional_people',
     ];
 
-    protected $casts = [
-        'additional_people' => 'array',
-    ];
+    public function tickets()
+    {
+        return $this->hasMany(OrderTicket::class);
+    }
 
     public function card()
     {
         return $this->belongsTo(Card::class);
     }
+
 }

@@ -2,58 +2,104 @@
 
 namespace App\Livewire;
 
+use App\Models\Order;
+use App\Models\Ticket;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use App\Models\Card;
 
 class CheckoutForm extends Component
 {
-    public $cardId;
+    public $tickets = [];
+    public $name;
+    public $phone;
     public $card;
-    public $tickets_count = 1;
-    public $full_name;
-    public $age;
-    public $phone_number;
+    public $email;
+    public $quantity = 1;
 
     public function mount($cardId)
     {
-        $this->cardId = $cardId;
-        $this->card = Card::find($cardId);
+        $this->card = Ticket::find($cardId);
 
         if (!$this->card) {
-            abort(404, 'Карточка не найдена');
+            abort(404, 'Карточка не найдена.');
         }
+
+        $this->tickets[] = [
+            'name' => '',
+            'email' => '',
+            'phone' => '',
+            'quantity' => 1,
+        ];
     }
 
-    public function increment()
+    public function addTicket()
     {
-        if ($this->tickets_count < 10) {
-            $this->tickets_count++;
-        }
+        $this->tickets[] = [
+            'name' => '',
+            'email' => '',
+            'phone' => '',
+            'quantity' => 1,
+        ];
     }
 
-    public function decrement()
+    public function removeTicket($index)
     {
-        if ($this->tickets_count > 1) {
-            $this->tickets_count--;
-        }
+        unset($this->tickets[$index]);
+        $this->tickets = array_values($this->tickets); // Сбрасываем ключи
     }
 
+    public function checkAvailability()
+    {
+        // Проверяем доступность билетов
+        foreach ($this->tickets as $ticket) {
+            $available = Ticket::find($ticket['id']);
+            if (!$available || $available->available_tickets < $ticket['quantity']) {
+                session()->flash('error', 'Недостаточно билетов для "' . $available->title . '".');
+                return;
+            }
+        }
+
+        // Если билеты доступны, перенаправляем на страницу оплаты
+        return redirect()->route('payment', ['tickets' => $this->tickets]);
+    }
     public function submit()
     {
+        Log::info('Метод submit начат.');
+
+        // Валидация всех билетов
         $this->validate([
-            'full_name' => 'required|string|max:255',
-            'age' => 'required|integer|min:1',
-            'phone_number' => 'required|string|max:15',
+            'tickets.*.name' => 'required|string|max:255',
+            'tickets.*.email' => 'required|email|max:255',
+            'tickets.*.phone' => 'required|string|max:20',
+            'tickets.*.quantity' => 'required|integer|min:1|max:' . $this->card->available_tickets,
         ]);
+        Log::info('Валидация прошла успешно.');
+        try {
+            session()->put('checkout', [
+                'cardId' => $this->card->id,
+                'tickets' => $this->tickets,
+            ]);
+            Log::info('Данные успешно сохранены в сессию: ', session()->get('checkout'));
+        } catch (Exception $e) {
+            Log::error('Ошибка при сохранении в сессию: ' . $e->getMessage());
+            throw $e;
+        }
 
-        // Логика сохранения заказа
-        session()->flash('message', 'Заказ успешно оформлен!');
-
-        return redirect()->route('home'); // Возвращаем на главную после заказа
+        try {
+            Log::info('Метод submit завершён. Выполняется редирект.');
+            return redirect()->route('payment');
+        } catch (Exception $e) {
+            Log::error('Ошибка редиректа: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function render()
     {
-        return view('livewire.checkout-form')->layout('layouts.main');
+        return view('livewire.checkout-form', [
+            'availableTickets' => Ticket::all(),
+            'card' => $this->card,
+        ])->extends('layouts.main');
     }
 }
