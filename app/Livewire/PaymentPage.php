@@ -2,59 +2,70 @@
 
 namespace App\Livewire;
 
-use App\Models\Order;
-use App\Models\OrderTicket;
-use App\Models\Ticket;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
+use App\Models\OrderTicket;
 
 class PaymentPage extends Component
 {
-    public $order = [];
     public $email;
+    public $cardNumber;
+    public $cardType;
+    public $order;
 
     public function mount()
     {
-        // Получаем данные из сессии
-        $this->order = session()->get('checkout', []);
+        $this->order = session('checkout');
 
-        if (empty($this->order)) {
-            Log::error('Данные заказа отсутствуют в сессии.');
-            return redirect()->route('tickets')->with('error', 'Данные заказа отсутствуют.');
+        if (!$this->order || empty($this->order['tickets'])) {
+            session()->flash('error', 'Данные заказа отсутствуют.');
+            return redirect()->route('tickets');
         }
 
-        Log::info('Данные из сессии:', $this->order);
-
-        // Инициализация email для чека
         $this->email = $this->order['tickets'][0]['email'] ?? '';
-        Log::info('Инициализация email для чека: ' . $this->email);
+    }
+
+    public function updatedCardNumber()
+    {
+        $this->cardType = $this->detectCardType($this->cardNumber);
+    }
+    private function detectCardType($number)
+    {
+        $patterns = [
+            'Visa' => '/^4[0-9]{12}(?:[0-9]{3})?$/',
+            'MasterCard' => '/^5[1-5][0-9]{14}$/',
+            'Мир' => '/^220[0-4][0-9]{12}$/',
+        ];
+
+        foreach ($patterns as $type => $pattern) {
+            if (preg_match($pattern, $number)) {
+                return $type;
+            }
+        }
+
+        return null;
     }
 
     public function processPayment()
     {
-        Log::info('Процесс оплаты начат.');
+        $this->validate([
+            'email' => 'required|email',
+            'cardNumber' => 'required|numeric|digits_between:13,19',
+        ]);
 
         if (!Auth::check()) {
-            Log::error('Пользователь не авторизован.');
             return redirect()->route('login')->with('error', 'Необходимо войти в систему.');
         }
 
-        $this->validate([
-            'email' => 'required|email',
-        ]);
-
         try {
-            // Создание заказа
             $order = Order::create([
                 'card_id' => $this->order['cardId'],
                 'tickets_count' => count($this->order['tickets']),
                 'user_id' => Auth::id(),
             ]);
 
-            Log::info('Заказ создан:', ['order_id' => $order->id, 'user_id' => Auth::id()]);
-
-            // Запись билетов в order_tickets
             foreach ($this->order['tickets'] as $ticket) {
                 OrderTicket::create([
                     'order_id' => $order->id,
@@ -64,11 +75,10 @@ class PaymentPage extends Component
                 ]);
             }
 
-            session()->forget('checkout');
-            session()->flash('success', 'Ваш заказ успешно оплачен!');
+            session()->forget('checkout');;
+            session()->flash('success', "Заказ #{$order->id} - {$order->card->title} успешно создан!");
             return redirect()->route('orders');
         } catch (\Exception $e) {
-            Log::error('Ошибка при обработке заказа: ' . $e->getMessage());
             session()->flash('error', 'Произошла ошибка при обработке заказа.');
         }
     }

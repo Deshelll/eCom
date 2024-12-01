@@ -9,10 +9,23 @@
 
     <div class="mb-4">
         <label class="block text-sm font-medium">Email для получения чека</label>
-        <input type="email" wire:model="email" class="w-full px-3 py-2 border rounded">
+        <input type="email" wire:model="email" class="w-full px-3 py-2 border rounded" disabled>
+        @error('email') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
     </div>
 
-    <button wire:click="processPayment" class="px-4 py-2 bg-teal-500 text-white rounded">
+    <div class="mb-4">
+        <label class="block text-sm font-medium">Номер карты</label>
+        <input type="text" wire:model.live="cardNumber"
+               class="w-full px-3 py-2 border rounded"
+               placeholder="Введите номер карты">
+        @if ($cardType)
+            <p class="text-sm text-gray-600 mt-2">Тип карты: {{ $cardType }}</p>
+        @else
+            <p class="text-sm text-gray-600 mt-2">Введите номер карты для определения типа</p>
+        @endif
+    </div>
+
+    <button wire:click="processPayment" class="px-4 py-2 bg-teal-500 text-white rounded" @if (!$cardNumber) disabled @endif>
         Оплатить
     </button>
 </div>

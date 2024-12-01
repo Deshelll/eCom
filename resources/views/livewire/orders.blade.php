@@ -1,5 +1,12 @@
 <div class="container mx-auto py-6">
     <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Мои заказы</h1>
+
+    @if (session('success'))
+        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if ($orders->isEmpty())
         <p class="text-center text-gray-600">Вы пока не сделали ни одного заказа.</p>
     @else
