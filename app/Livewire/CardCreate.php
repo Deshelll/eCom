@@ -15,7 +15,6 @@ class CardCreate extends Component
 
     public function emitOpenModal()
     {
-        // Отправляем событие openModal с ID карточки
         $this->dispatch('openModal', id: $this->card->id);
     }
 

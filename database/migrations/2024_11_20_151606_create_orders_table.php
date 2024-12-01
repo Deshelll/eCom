@@ -10,8 +10,8 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('card_id')->constrained('cards')->onDelete('cascade'); // ID карточки
-            $table->integer('tickets_count'); // Количество билетов
+            $table->foreignId('card_id')->constrained('cards')->onDelete('cascade');
+            $table->integer('tickets_count');
             $table->timestamps();
         });
     }

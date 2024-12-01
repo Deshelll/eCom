@@ -40,13 +40,12 @@ class PaymentPage extends Component
             return redirect()->route('login')->with('error', 'Необходимо войти в систему.');
         }
 
-        // Валидация email
         $this->validate([
             'email' => 'required|email',
         ]);
 
         try {
-            // Создание заказа и привязка к текущему пользователю
+            // Создание заказа
             $order = Order::create([
                 'card_id' => $this->order['cardId'],
                 'tickets_count' => count($this->order['tickets']),
@@ -77,7 +76,7 @@ class PaymentPage extends Component
     public function render()
     {
         return view('livewire.payment-page', [
-            'order' => $this->order, // Передаём $order в шаблон
+            'order' => $this->order,
         ])->extends('layouts.main');
     }
 }

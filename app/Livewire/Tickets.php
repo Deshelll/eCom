@@ -11,7 +11,7 @@ class Tickets extends Component
 
     public function mount()
     {
-        $this->cards = CardModel::all(); // Загружаем карточки
+        $this->cards = CardModel::all();
     }
 
     public function render()

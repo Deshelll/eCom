@@ -10,9 +10,9 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('card_id')->constrained('cards')->onDelete('cascade'); // Связь с таблицей cards
-            $table->integer('total_tickets'); // Общее количество билетов
-            $table->integer('available_tickets'); // Свободные билеты
+            $table->foreignId('card_id')->constrained('cards')->onDelete('cascade');
+            $table->integer('total_tickets');
+            $table->integer('available_tickets');
             $table->timestamps();
         });
     }

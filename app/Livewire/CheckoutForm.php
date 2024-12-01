@@ -65,29 +65,23 @@ class CheckoutForm extends Component
     }
     public function submit()
     {
-        Log::info('Метод submit начат.');
-
-        // Валидация всех билетов
         $this->validate([
             'tickets.*.name' => 'required|string|max:255',
             'tickets.*.email' => 'required|email|max:255',
             'tickets.*.phone' => 'required|string|max:20',
             'tickets.*.quantity' => 'required|integer|min:1|max:' . $this->card->available_tickets,
         ]);
-        Log::info('Валидация прошла успешно.');
+
         try {
             session()->put('checkout', [
                 'cardId' => $this->card->id,
                 'tickets' => $this->tickets,
             ]);
-            Log::info('Данные успешно сохранены в сессию: ', session()->get('checkout'));
         } catch (Exception $e) {
-            Log::error('Ошибка при сохранении в сессию: ' . $e->getMessage());
             throw $e;
         }
 
         try {
-            Log::info('Метод submit завершён. Выполняется редирект.');
             return redirect()->route('payment');
         } catch (Exception $e) {
             Log::error('Ошибка редиректа: ' . $e->getMessage());
