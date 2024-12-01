@@ -12,6 +12,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->foreignId('card_id')->constrained('cards')->onDelete('cascade');
             $table->integer('tickets_count');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

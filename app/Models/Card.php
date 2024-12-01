@@ -15,5 +15,4 @@ class Card extends Model
     {
         return $this->hasOne(Ticket::class, 'card_id');
     }
-
 }

@@ -57,6 +57,9 @@ Route::post('/support/submit', [SupportController::class, 'submit'])->name('supp
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
+Route::get('/login/auth/yandex', [LoginController::class, 'redirectToYandex'])->name('login.yandex');
+Route::get('/login/auth/yandex/callback', [LoginController::class, 'handleYandexCallback']);
+
 //карточки
 Route::get('/tickets', Tickets::class)->name('tickets');
 
