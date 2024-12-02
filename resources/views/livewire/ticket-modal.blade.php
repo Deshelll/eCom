@@ -12,10 +12,14 @@
                     @if ($image)
                         <img src="{{ $image }}" alt="Image" class="w-full h-auto rounded mb-4 mt-4">
                     @endif
-                    <p>
-                        Билеты: <strong>{{ $totalTickets }}</strong> /
-                        Доступно: <strong>{{ $availableTickets }}</strong>
-                    </p>
+
+                    @if($type === 'ticket')
+                        <p>
+                            Билеты: <strong>{{ $totalTickets }}</strong> /
+                            Доступно: <strong>{{ $availableTickets }}</strong>
+                        </p>
+                    @endif
+
                     <p class="text-lg font-bold">Цена: {{ $price }} руб.</p>
                 </div>
 
