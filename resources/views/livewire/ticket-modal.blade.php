@@ -20,6 +20,20 @@
                         </p>
                     @endif
 
+                    @if($type === 'rental')
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold">Свободные места</h3>
+                            <div class="grid grid-cols-4 gap-2">
+                                @foreach ($this->getSeatInfo() as $seat)
+                                    <div class="p-2 border rounded-lg text-center
+                                        {{ $seat['is_booked'] ? 'bg-gray-300 text-gray-500' : 'bg-green-200 text-green-800' }}">
+                                        {{ $seat['seat_number'] ?? $seat['time_slot'] }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <p class="text-lg font-bold">Цена: {{ $price }} руб.</p>
                 </div>
 

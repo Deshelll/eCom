@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Card;
 use App\Models\RentalCard;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -74,6 +75,35 @@ class TicketModal extends Component
         } elseif ($this->type === 'ticket') {
             return redirect()->route('checkout', ['cardId' => $this->itemId]);
         }
+    }
+
+    public function getSeatInfo()
+    {
+        if ($this->type === 'ticket') {
+            $item = Card::with('tickets')->find($this->itemId);
+            if ($item) {
+                return $item->tickets->map(function ($ticket) {
+                    return [
+                        'seat_number' => $ticket->seat_number ?? 'Место',
+                        'is_booked' => $ticket->is_booked,
+                    ];
+                });
+            }
+        } elseif ($this->type === 'rental') {
+            $item = RentalCard::with('rentalTimes')->find($this->itemId);
+            if ($item) {
+                return $item->rentalTimes->map(function ($time) {
+                    $start = Carbon::parse($time->start_time);
+                    $end = $start->copy()->addMinutes(45);
+
+                    return [
+                        'time_slot' => $start->format('H:i') . ' - ' . $end->format('H:i'),
+                        'is_booked' => $time->is_booked,
+                    ];
+                });
+            }
+        }
+        return collect();
     }
 
     public function render()
