@@ -35,11 +35,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {{-- билеты --}}
             @foreach ($orders as $order)
-                <div class="bg-white p-4 rounded-lg shadow">
+                <div class="bg-white p-4 rounded-lg shadow relative">
+                    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        Оплачено
+                    </div>
                     <h3 class="text-lg font-semibold mb-2">
                         Заказ №{{ $order->id }} - {{ $order->card->title ?? 'Маршрут не указан' }}
                     </h3>
-                    <p><strong>Карта:</strong> {{ $order->card_id }}</p>
+
                     <p><strong>Количество билетов:</strong> {{ $order->tickets_count }}</p>
                     <ul class="mt-2">
                         <strong>Билеты:</strong>
@@ -52,7 +55,10 @@
 
             {{-- аренда --}}
             @foreach ($rentalOrders as $rentalOrder)
-                <div class="bg-white p-4 rounded-lg shadow">
+                <div class="bg-white p-4 rounded-lg shadow relative">
+                    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        Оплачено
+                    </div>
                     <h3 class="text-lg font-semibold mb-2">
                         Аренда №{{ $rentalOrder->id }} - {{ $rentalOrder->rentalCard->title ?? 'Карта не указана' }}
                     </h3>
