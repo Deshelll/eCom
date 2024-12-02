@@ -17,7 +17,7 @@ class CheckoutForm extends Component
     public $email;
     public $quantity = 1;
 
-    public function mount($cardId)
+    public function mount($cardId): void
     {
         $this->card = Ticket::find($cardId);
 
@@ -33,7 +33,7 @@ class CheckoutForm extends Component
         ];
     }
 
-    public function addTicket()
+    public function addTicket(): void
     {
         $this->tickets[] = [
             'name' => '',
@@ -43,7 +43,7 @@ class CheckoutForm extends Component
         ];
     }
 
-    public function removeTicket($index)
+    public function removeTicket($index): void
     {
         unset($this->tickets[$index]);
         $this->tickets = array_values($this->tickets); // Сбрасываем ключи

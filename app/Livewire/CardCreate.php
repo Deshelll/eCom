@@ -8,12 +8,12 @@ class CardCreate extends Component
 {
     public $card;
 
-    public function mount($card)
+    public function mount($card): void
     {
         $this->card = $card;
     }
 
-    public function emitOpenModal()
+    public function emitOpenModal(): void
     {
         $this->dispatch('openModal', id: $this->card->id);
     }

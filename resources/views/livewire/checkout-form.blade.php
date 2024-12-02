@@ -56,7 +56,6 @@
         </button>
     </div>
 
-    <!-- Кнопка "Купить" -->
     <div class="mt-6">
         <button type="button" wire:click="submit" class="px-6 py-2 bg-teal-500 text-white rounded hover:bg-teal-600">
             Купить

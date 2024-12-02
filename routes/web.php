@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Rental;
+use App\Livewire\RentalCheckoutForm;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
@@ -38,9 +40,7 @@ Route::post('/logout', function () {
 
 //Маршруты вертикального меню
 
-Route::get('/rental', function () {
-    return view('rental');
-})->name('rental');
+Route::get('/rental', Rental::class)->name('rental');
 
 Route::get('/orders', \App\Livewire\Orders::class)->name('orders');
 
@@ -64,7 +64,8 @@ Route::get('/login/auth/yandex/callback', [LoginController::class, 'handleYandex
 Route::get('/tickets', Tickets::class)->name('tickets');
 
 //ввод данных для покупки билетов
-Route::get('/checkout/{cardId}', CheckoutForm::class)->name('checkout');
+Route::get('/checkout/{cardId}', \App\Livewire\CheckoutForm::class)->name('checkout');
 
 //оплата
 Route::get('/payment', PaymentPage::class)->name('payment');
+Route::get('rental/checkout/{rentalCardId}', RentalCheckoutForm::class)->name('rental.checkout');

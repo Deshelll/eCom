@@ -9,7 +9,7 @@ class Tickets extends Component
 {
     public $cards;
 
-    public function mount()
+    public function mount(): void
     {
         $this->cards = CardModel::all();
     }
