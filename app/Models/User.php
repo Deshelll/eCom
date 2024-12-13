@@ -26,6 +26,7 @@ class User extends Authenticatable
         'avatar',
         'phone',
         'google_id',
+        'role_id',
     ];
 
     /**
@@ -38,11 +39,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -54,5 +50,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    public function hasRole(string $role): bool
+    {
+        return $this->role && $this->role->name === $role;
     }
 }
