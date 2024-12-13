@@ -88,6 +88,7 @@ class CheckoutForm extends Component
                 'cardId' => $this->card->id,
                 'tickets' => $this->tickets,
                 'totalPrice' => $totalPrice,
+                'email' => auth()->user()->email,
             ]);
 
             Log::info('Итоговая сумма: ' . $totalPrice);

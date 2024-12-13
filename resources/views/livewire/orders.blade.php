@@ -14,14 +14,6 @@
             placeholder="Название"
             class="w-1/3 px-4 py-2 border rounded-lg">
 
-        <select
-            wire:model="type"
-            class="px-4 py-2 border rounded-lg">
-            <option value="">Все</option>
-            <option value="tickets">Билеты</option>
-            <option value="rental">Аренда</option>
-        </select>
-
         <input
             type="number"
             wire:model.live="ticketCount"
