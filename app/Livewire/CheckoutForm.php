@@ -28,6 +28,7 @@ class CheckoutForm extends Component
         }
 
         $this->tickets[] = [
+            'id' => $this->card->id,
             'name' => '',
             'email' => '',
             'phone' => '',
@@ -38,6 +39,7 @@ class CheckoutForm extends Component
     public function addTicket(): void
     {
         $this->tickets[] = [
+            'id' => $this->card->id,
             'name' => '',
             'email' => '',
             'phone' => '',

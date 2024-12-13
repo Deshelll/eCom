@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderTicket;
 use App\Models\RentalOrder;
 use App\Models\RentalTime;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -51,6 +52,14 @@ class PaymentPage extends Component
                     'email' => $ticket['email'] ?? null,
                     'phone' => $ticket['phone'],
                 ]);
+
+                $ticketModel = Ticket::find($ticket['id']);
+                if ($ticketModel) {
+                    Log::info('Обновляем билет', ['ticket_id' => $ticket['id'], 'quantity' => $ticket['quantity']]);
+                    $ticketModel->decrement('available_tickets', $ticket['quantity']);
+                } else {
+                    Log::warning('Билет с ID ' . $ticket['id'] . ' не найден.');
+                }
             }
 
             session()->forget('checkout');
@@ -58,7 +67,6 @@ class PaymentPage extends Component
             redirect()->route('orders');
             return;
         } catch (\Exception $e) {
-            Log::error('Ошибка при обработке заказа: ' . $e->getMessage());
             session()->flash('error', 'Произошла ошибка при обработке заказа.');
         }
     }
