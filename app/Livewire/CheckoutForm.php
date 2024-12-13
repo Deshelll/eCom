@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Card;
 use App\Models\Order;
 use App\Models\Ticket;
 use Exception;
@@ -15,11 +16,12 @@ class CheckoutForm extends Component
     public $phone;
     public $card;
     public $email;
-    public $quantity = 1;
+    public $order;
 
     public function mount($cardId): void
     {
-        $this->card = Ticket::find($cardId);
+        //$this->card = Ticket::find($cardId);
+        $this->card = Card::with('tickets')->find($cardId);
 
         if (!$this->card) {
             abort(404, 'Карточка не найдена.');
@@ -65,18 +67,29 @@ class CheckoutForm extends Component
     }
     public function submit()
     {
+        $maxTickets = $this->card->ticket->available_tickets ?? PHP_INT_MAX;
+
         $this->validate([
             'tickets.*.name' => 'required|string|max:255',
             'tickets.*.email' => 'required|email|max:255',
             'tickets.*.phone' => 'required|string|max:20',
-            'tickets.*.quantity' => 'required|integer|min:1|max:' . $this->card->available_tickets,
+            'tickets.*.quantity' => 'required|integer|min:1|max:' . $maxTickets,
         ]);
+
+        $totalPrice = 0;
+        foreach ($this->tickets as $ticket) {
+            $totalPrice += $ticket['quantity'] * $this->card->price;
+        }
 
         try {
             session()->put('checkout', [
                 'cardId' => $this->card->id,
                 'tickets' => $this->tickets,
+                'totalPrice' => $totalPrice,
             ]);
+
+            Log::info('Итоговая сумма: ' . $totalPrice);
+
         } catch (Exception $e) {
             throw $e;
         }

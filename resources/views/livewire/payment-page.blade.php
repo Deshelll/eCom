@@ -27,7 +27,7 @@
                     @endforeach
                 </ul>
             @else
-                <p>Билеты не выбраны.</p>
+                <p></p>
             @endif
 
     </div>
@@ -49,6 +49,10 @@
         @else
             <p class="text-sm text-gray-600 mt-2">Введите номер карты для определения типа</p>
         @endif
+    </div>
+
+    <div>
+        <p class="text-lg">Сумма заказа: <strong>{{ number_format($order['totalPrice'], 2, '.', ' ') }} ₽</strong></p>
     </div>
 
     <button wire:click="processPayment" class="px-4 py-2 bg-teal-500 text-white rounded" @if (!$cardNumber) disabled @endif>

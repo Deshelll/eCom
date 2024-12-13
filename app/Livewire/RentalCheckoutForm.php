@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\RentalCard;
 use App\Models\RentalTime;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class RentalCheckoutForm extends Component
@@ -32,6 +33,9 @@ class RentalCheckoutForm extends Component
 
     public function goToPayment()
     {
+        $totalPrice = count($this->selectedTimes) * $this->rentalCard->price;
+
+
         if (empty($this->selectedTimes)) {
             session()->flash('error', 'Не выбрано ни одно время!');
             return;
@@ -45,6 +49,7 @@ class RentalCheckoutForm extends Component
             'email' => auth()->user()->email,
             'groupedTimes' => $groupedTimes,
             'allTimes' => $allTimes,
+            'totalPrice' => $totalPrice,
         ]);
 
         return redirect()->route('payment');

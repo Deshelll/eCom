@@ -22,6 +22,7 @@ class PaymentPage extends Component
     {
         $this->selectedTickets = session()->get('checkout')['tickets'] ?? [];
         $this->order = session()->get('checkout', []);
+
         if (empty($this->order)) {
             Log::error('Данные заказа отсутствуют в сессии.');
             return redirect()->route('tickets')->with('error', 'Данные заказа отсутствуют.');
@@ -29,7 +30,8 @@ class PaymentPage extends Component
 
         $this->type = $this->order['type'] ?? 'ticket';
         $this->email = $this->order['email'] ?? '';
-        Log::info('Инициализация для типа: ' . $this->type . ', данные заказа: ' . json_encode($this->order));
+
+        $this->totalPrice = $this->order['totalPrice'] ?? 0;
     }
 
     public function processTickets(): void
