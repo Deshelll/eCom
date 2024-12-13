@@ -42,7 +42,8 @@
         <label class="block text-sm font-medium">Номер карты</label>
         <input type="text" wire:model.live="cardNumber"
                class="w-full px-3 py-2 border rounded"
-               placeholder="Введите номер карты">
+               placeholder="Введите номер карты"
+               maxlength="16">
         @if ($cardType)
             <p class="text-sm text-gray-600 mt-2">Тип карты: {{ $cardType }}</p>
         @else

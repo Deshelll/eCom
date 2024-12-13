@@ -64,8 +64,12 @@ Route::get('/login/auth/yandex/callback', [LoginController::class, 'handleYandex
 Route::get('/tickets', Tickets::class)->name('tickets');
 
 //ввод данных для покупки билетов
-Route::get('/checkout/{cardId}', \App\Livewire\CheckoutForm::class)->name('checkout');
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout/{cardId}', \App\Livewire\CheckoutForm::class)->name('checkout');
+
+    Route::get('rental/checkout/{rentalCardId}', RentalCheckoutForm::class)->name('rental.checkout');
+});
 
 //оплата
 Route::get('/payment', PaymentPage::class)->name('payment');
-Route::get('rental/checkout/{rentalCardId}', RentalCheckoutForm::class)->name('rental.checkout');
+
