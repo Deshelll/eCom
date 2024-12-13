@@ -11,6 +11,7 @@ class OrderTicket extends Model
         'name',
         'email',
         'phone',
+        'status',
     ];
 
 

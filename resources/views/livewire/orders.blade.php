@@ -28,9 +28,17 @@
             {{-- билеты --}}
             @foreach ($orders as $order)
                 <div class="bg-white p-4 rounded-lg shadow relative">
-                    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        Оплачено
-                    </div>
+
+                    @if($order->tickets->every(fn($ticket) => $ticket->status === 'Оплачено'))
+                        <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            Оплачено
+                        </div>
+                    @else
+                        <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            Не оплачено
+                        </div>
+                    @endif
+
                     <h3 class="text-lg font-semibold mb-2">
                         Заказ №{{ $order->id }} - {{ $order->card->title ?? 'Маршрут не указан' }}
                     </h3>
@@ -48,9 +56,16 @@
             {{-- аренда --}}
             @foreach ($rentalOrders as $rentalOrder)
                 <div class="bg-white p-4 rounded-lg shadow relative">
-                    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        Оплачено
-                    </div>
+                    @if($rentalOrder->status === 'Оплачено')
+                        <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            {{ $rentalOrder->status }}
+                        </div>
+                    @else
+                        <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            {{ $rentalOrder->status }}
+                        </div>
+                    @endif
+
                     <h3 class="text-lg font-semibold mb-2">
                         Аренда №{{ $rentalOrder->id }} - {{ $rentalOrder->rentalCard->title ?? 'Карта не указана' }}
                     </h3>

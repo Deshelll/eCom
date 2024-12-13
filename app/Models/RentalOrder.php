@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class RentalOrder extends Model
 {
-    protected $fillable = ['rental_card_id', 'user_id', 'start_time', 'end_time'];
+    protected $fillable = [
+        'rental_card_id',
+        'user_id',
+        'start_time',
+        'end_time',
+        'status',
+    ];
 
     public function rentalCard()
     {
@@ -18,4 +24,8 @@ class RentalOrder extends Model
         return $this->hasMany(RentalTime::class, 'rental_card_id', 'rental_card_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

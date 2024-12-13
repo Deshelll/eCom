@@ -37,7 +37,6 @@ class PaymentPage extends Component
 
     public function processTickets(): void
     {
-
         try {
             $order = Order::create([
                 'card_id' => $this->order['cardId'],
@@ -46,24 +45,25 @@ class PaymentPage extends Component
             ]);
 
             foreach ($this->order['tickets'] as $ticket) {
+                $ticketPaid = rand(0, 100) < 80;
+                $status = $ticketPaid ? 'Оплачено' : 'Не оплачено';
+
                 OrderTicket::create([
                     'order_id' => $order->id,
                     'name' => $ticket['name'],
                     'email' => $ticket['email'] ?? null,
                     'phone' => $ticket['phone'],
+                    'status' => $status,
                 ]);
 
                 $ticketModel = Ticket::find($ticket['id']);
-                if ($ticketModel) {
-                    Log::info('Обновляем билет', ['ticket_id' => $ticket['id'], 'quantity' => $ticket['quantity']]);
+                if ($ticketModel && $ticketPaid) {
                     $ticketModel->decrement('available_tickets', $ticket['quantity']);
-                } else {
-                    Log::warning('Билет с ID ' . $ticket['id'] . ' не найден.');
                 }
             }
 
             session()->forget('checkout');
-            session()->flash('success', "Заказ #{$order->id} - {$order->card->title} успешно создан!");
+            session()->flash('success', "Заказ #{$order->id} успешно оплачен!");
             redirect()->route('orders');
             return;
         } catch (\Exception $e) {
@@ -82,11 +82,13 @@ class PaymentPage extends Component
             return redirect()->route('login')->with('error', 'Необходимо войти в систему.');
         }
 
+        $isPaid = rand(0, 100) < 90;
+
         try {
             if ($this->type === 'rental') {
-                $this->processRental();
+                $this->processRental($isPaid);
             } else {
-                $this->processTickets();
+                $this->processTickets($isPaid);
             }
         } catch (\Exception $e) {
             Log::error('Ошибка при обработке заказа: ' . $e->getMessage());
@@ -94,30 +96,29 @@ class PaymentPage extends Component
         }
     }
 
-    private function processRental(): void
+    private function processRental($isPaid): void
     {
-        Log::info('Начало обработки заказа на аренду.');
-
+        Log::info('Результат оплаты (isPaid): ', ['isPaid' => $isPaid]);
         try {
             $order = RentalOrder::create([
                 'rental_card_id' => $this->order['cardId'],
                 'user_id' => Auth::id(),
                 'times' => json_encode($this->order['groupedTimes']),
+                'status' => $isPaid ? 'Оплачено' : 'Не оплачено',
             ]);
 
-            Log::info('Заказ на аренду создан: ', ['order_id' => $order->id]);
-
-            foreach ($this->order['allTimes'] as $time) {
-                $start = $time[0];
-                RentalTime::where('rental_card_id', $this->order['cardId'])
-                    ->where('start_time', $start)
-                    ->update(['is_booked' => 1]);
+            if ($isPaid) {
+                foreach ($this->order['allTimes'] as $time) {
+                    $start = $time[0];
+                    RentalTime::where('rental_card_id', $this->order['cardId'])
+                        ->where('start_time', $start)
+                        ->update(['is_booked' => 1]);
+                }
             }
 
-            Log::info('Выбранные временные интервалы отмечены как занятые.');
-
             session()->forget('checkout');
-            session()->flash('success', 'Ваш заказ успешно оплачен!');
+            $message = $isPaid ? 'Ваш заказ успешно оплачен!' : 'Оплата не удалась.';
+            session()->flash('success', $message);
             redirect()->route('orders');
             return;
         } catch (\Exception $e) {

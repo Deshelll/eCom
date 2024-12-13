@@ -38,6 +38,7 @@ class Orders extends Component
 
         if ($this->type === 'tickets' || $this->type === '') {
             $this->orders = Order::with(['tickets', 'card'])
+                ->where('user_id', auth()->id()) // Фильтрация по текущему пользователю
                 ->when($this->search, function ($query) {
                     $query->whereHas('card', function ($q) {
                         $q->where('title', 'like', '%' . $this->search . '%');
@@ -51,6 +52,7 @@ class Orders extends Component
 
         if ($this->type === 'rental' || $this->type === '') {
             $this->rentalOrders = RentalOrder::with('rentalCard')
+                ->where('user_id', auth()->id()) // Фильтрация по текущему пользователю
                 ->when($this->search, function ($query) {
                     $query->whereHas('rentalCard', function ($q) {
                         $q->where('title', 'like', '%' . $this->search . '%');
