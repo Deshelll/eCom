@@ -26,10 +26,6 @@
                         <img src="/images/google.png" alt="Google" class="w-5 h-5 mr-2">
                         Войти через Google
                     </a>
-                    <a href="{{ route('login.yandex') }}" class="w-full flex items-center justify-center border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 focus:outline-none">
-                        <img src="/images/yandex.png" alt="Yandex" class="w-5 h-5 mr-2">
-                        Войти через Yandex
-                    </a>
                 </div>
 
                 <!-- Ссылка на регистрацию -->
