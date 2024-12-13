@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Профил')
+@section('title', 'Профиль')
 
 @section('content')
     <!-- Блок для отображения ошибок -->
