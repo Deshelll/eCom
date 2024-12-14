@@ -22,9 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->make('events')->listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {
-            $event->extendSocialite('yandex', YandexExtendSocialite::class);
-        });
         Livewire::component('ticket-modal', \App\Livewire\TicketModal::class);
 
     }

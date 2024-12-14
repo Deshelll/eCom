@@ -11,23 +11,16 @@ class Tickets extends Component
 
     public function mount(): void
     {
+        // Загружаем все карточки при инициализации компонента
         $this->cards = CardModel::all();
     }
 
-    public function deleteCard($id)
-    {
-        // Находим карточку
-        $card = CardModel::findOrFail($id);
-
-        // Удаляем карточку
-        $card->delete();
-
-        // Обновляем список карточек
-        $this->cards = CardModel::all();
-
-        // Добавляем уведомление об успешном удалении
-        session()->flash('success', 'Карточка успешно удалена!');
-    }
+    /**
+     * Метод для удаления карточки
+     *
+     * @param int $id
+     * @return void
+     */
 
     public function render()
     {

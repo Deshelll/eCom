@@ -72,5 +72,4 @@ Route::middleware('auth')->group(function () {
 
 //оплата
 Route::get('/payment', PaymentPage::class)->name('payment');
-Route::delete('/cards/{id}', \App\Livewire\Tickets::class . '@deleteCard')->name('cards.destroy');
 
