@@ -34,31 +34,60 @@
 
     <!-- Форма для добавления нового билета (только для администратора) -->
     @if (auth()->check() && auth()->user()->role_id === 1)
-        <div class="p-6 bg-white shadow rounded-md">
-            <h3 class="text-lg font-semibold mb-4">Добавить новый билет</h3>
-            <form wire:submit.prevent="saveTicket">
-                <div class="mb-4">
-                    <label for="title" class="block text-sm font-medium">Название</label>
-                    <input type="text" id="title" wire:model="title" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
-                    @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        <div class="p-8 bg-gradient-to-r from-gray-50 to-white shadow-lg rounded-lg">
+            <h3 class="text-xl font-semibold mb-6 text-gray-800">Добавить новый билет</h3>
+            <form wire:submit.prevent="saveTicket" class="space-y-4">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Название</label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        wire:model="title" 
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                    @error('title') 
+                        <span class="text-red-500 text-sm">{{ $message }}</span> 
+                    @enderror
                 </div>
-                <div class="mb-4">
-                    <label for="description" class="block text-sm font-medium">Описание</label>
-                    <textarea id="description" wire:model="description" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"></textarea>
-                    @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Описание</label>
+                    <textarea 
+                        id="description" 
+                        wire:model="description" 
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"></textarea>
+                    @error('description') 
+                        <span class="text-red-500 text-sm">{{ $message }}</span> 
+                    @enderror
                 </div>
-                <div class="mb-4">
-                    <label for="price" class="block text-sm font-medium">Цена</label>
-                    <input type="number" id="price" wire:model="price" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
-                    @error('price') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="mb-4">
-                    <label for="image" class="block text-sm font-medium">Картинка</label>
-                    <input type="file" id="image" wire:model="image" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
-                    @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-700">Цена</label>
+                        <input 
+                            type="number" 
+                            id="price" 
+                            wire:model="price" 
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                        @error('price') 
+                            <span class="text-red-500 text-sm">{{ $message }}</span> 
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="image" class="block text-sm font-medium text-gray-700">Картинка</label>
+                        <input 
+                            type="file" 
+                            id="image" 
+                            wire:model="image" 
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                        @error('image') 
+                            <span class="text-red-500 text-sm">{{ $message }}</span> 
+                        @enderror
+                    </div>
                 </div>
                 <div class="flex justify-end">
-                    <button type="submit" class="px-6 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">Создать</button>
+                    <button 
+                        type="submit" 
+                        class="px-6 py-2 bg-teal-500 text-white text-sm font-medium rounded-md shadow hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        Создать
+                    </button>
                 </div>
             </form>
         </div>

@@ -63,7 +63,7 @@
                             </div>
                         @endif
 
-                        <p class="text-xl font-bold text-teal-600">Цена: {{ $price }} руб.</p>
+                        <p class="text-xl font-bold text-teal-600">Цена: {{ $price }} ₽</p>
                     @endif
                 </div>
 
