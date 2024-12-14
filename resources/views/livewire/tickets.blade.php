@@ -1,11 +1,12 @@
 <div>
     <!-- Список существующих карточек -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
+    <div class="grid grid-cols-3 gap-6 mb-6">
         @foreach ($cards as $card)
-            <div class="relative border rounded p-6 bg-white overflow-hidden">
-                @livewire('card-create', ['card' => $card], key($card->id), ['class' => 'shadow-none'])
+            <div class="relative bg-gradient-to-r from-white to-gray-50 shadow-md rounded-lg p-4 transform transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <!-- Карточка -->
+                @livewire('card-create', ['card' => $card], key($card->id))
 
-                <!-- Крестик в квадратике -->
+                <!-- Кнопка удаления (только для админа) -->
                 @if (auth()->check() && auth()->user()->role_id === 1)
                     <button 
                         wire:click="deleteCard({{ $card->id }})" 
@@ -20,18 +21,18 @@
 
     <!-- Сообщения об успехе и ошибке -->
     @if (session()->has('success'))
-        <div class="bg-green-500 text-white p-2 rounded mb-4">
+        <div class="bg-green-500 text-white p-3 rounded mb-4 text-center">
             {{ session('success') }}
         </div>
     @endif
 
     @if (session()->has('error'))
-        <div class="bg-red-500 text-white p-2 rounded mb-4">
+        <div class="bg-red-500 text-white p-3 rounded mb-4 text-center">
             {{ session('error') }}
         </div>
     @endif
 
-    <!-- Форма для добавления нового билета -->
+    <!-- Форма для добавления нового билета (только для администратора) -->
     @if (auth()->check() && auth()->user()->role_id === 1)
         <div class="p-6 bg-white shadow rounded-md">
             <h3 class="text-lg font-semibold mb-4">Добавить новый билет</h3>
@@ -57,7 +58,7 @@
                     @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="flex justify-end">
-                    <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">Создать</button>
+                    <button type="submit" class="px-6 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">Создать</button>
                 </div>
             </form>
         </div>
