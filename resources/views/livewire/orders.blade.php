@@ -28,8 +28,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {{-- Билеты --}}
             @foreach ($orders as $order)
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all">
-                    <div class="absolute top-2 right-2 px-3 py-1 text-xs font-bold rounded {{ $order->tickets->every(fn($ticket) => $ticket->status === 'Оплачено') ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all relative">
+                    <div class="absolute bottom-4 right-4 px-3 py-1 text-xs font-bold rounded-lg {{ $order->tickets->every(fn($ticket) => $ticket->status === 'Оплачено') ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
                         {{ $order->tickets->every(fn($ticket) => $ticket->status === 'Оплачено') ? 'Оплачено' : 'Не оплачено' }}
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">
@@ -47,8 +47,8 @@
 
             {{-- Аренда --}}
             @foreach ($rentalOrders as $rentalOrder)
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all">
-                    <div class="absolute top-2 right-2 px-3 py-1 text-xs font-bold rounded {{ $rentalOrder->status === 'Оплачено' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all relative">
+                    <div class="absolute bottom-4 right-4 px-3 py-1 text-xs font-bold rounded-lg {{ $rentalOrder->status === 'Оплачено' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
                         {{ $rentalOrder->status }}
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">
