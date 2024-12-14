@@ -25,7 +25,7 @@
                         <button 
                             wire:click.stop="deleteRentalCard({{ $card->id }})" 
                             onclick="return confirm('Вы уверены, что хотите удалить эту карточку?')" 
-                            class="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 flex items-center justify-center rounded hover:bg-red-600 transition-all z-10">
+                            class="absolute bottom-2 right-2 bg-red-500 text-white w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-600 transition-all shadow-md">
                             ✖
                         </button>
                     @endif
