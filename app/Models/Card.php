@@ -15,4 +15,19 @@ class Card extends Model
     {
         return $this->hasOne(Ticket::class, 'card_id');
     }
+
+    /**
+     * Метод для автоматического создания связанного билета.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($card) {
+            $card->tickets()->create([
+                'total_tickets' => 150, // Дефолтное общее количество билетов
+                'available_tickets' => 150, // Дефолтное доступное количество билетов
+            ]);
+        });
+    }
 }
