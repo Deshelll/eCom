@@ -33,15 +33,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Метод для автоматического обновления доступных билетов.
-     */
     protected static function boot()
     {
         parent::boot();
 
         static::created(function ($order) {
-            // Уменьшаем количество доступных билетов у карточки
             $card = $order->card;
             $card->tickets->decrement('available_tickets', $order->tickets_count);
         });

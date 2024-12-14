@@ -15,8 +15,8 @@ class TicketSeeder extends Seeder
         foreach ($cards as $card) {
             Ticket::create([
                 'card_id' => $card->id,
-                'total_tickets' => rand(100, 200), // Общее количество билетов
-                'available_tickets' => rand(50, 100), // Свободные билеты
+                'total_tickets' => rand(100, 200),
+                'available_tickets' => rand(50, 100),
             ]);
         }
     }

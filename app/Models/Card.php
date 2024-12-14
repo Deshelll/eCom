@@ -25,8 +25,8 @@ class Card extends Model
 
         static::created(function ($card) {
             $card->tickets()->create([
-                'total_tickets' => 150, // Дефолтное общее количество билетов
-                'available_tickets' => 150, // Дефолтное доступное количество билетов
+                'total_tickets' => 150,
+                'available_tickets' => 150,
             ]);
         });
     }
