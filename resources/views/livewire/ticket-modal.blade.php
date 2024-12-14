@@ -2,7 +2,6 @@
     @if ($isOpen)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
             <div class="bg-white rounded-lg shadow-xl w-[60%] h-[75%] relative flex flex-col overflow-hidden">
-                <!-- Заголовок -->
                 <div class="modal-header flex justify-between items-center p-4 border-b bg-gray-100">
                     <h5 class="text-xl font-bold text-gray-800">
                         @if ($isEditMode)
@@ -14,10 +13,8 @@
                     <button type="button" wire:click="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold transition-all duration-200">&times;</button>
                 </div>
 
-                <!-- Тело модального окна -->
                 <div class="flex flex-col modal-body p-4 overflow-auto flex-grow">
                     @if ($isEditMode)
-                        <!-- Режим редактирования -->
                         <label class="block mb-3">
                             <span class="text-sm font-medium text-gray-700">Название маршрута</span>
                             <input type="text" wire:model="title" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-teal-400">
@@ -33,7 +30,6 @@
                             <input type="number" wire:model="price" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-teal-400">
                         </label>
                     @else
-                        <!-- Режим просмотра -->
                         @if ($image)
                             <div class="rounded-lg overflow-hidden mb-4">
                                 <img src="{{ $image }}" alt="Image" class="w-full h-48 object-cover">
@@ -67,7 +63,6 @@
                     @endif
                 </div>
 
-                <!-- Нижняя часть модального окна -->
                 <div class="modal-footer flex justify-between items-center p-4 border-t bg-gray-100">
                     @if ($isEditMode)
                         <button type="button" wire:click="saveChanges" class="px-5 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-all">

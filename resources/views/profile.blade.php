@@ -3,7 +3,6 @@
 @section('title', 'Профиль')
 
 @section('content')
-    <!-- Блок для отображения ошибок -->
     @if ($errors->any())
         <div class="bg-red-100 text-red-700 p-4 rounded-md mb-6 max-w-2xl mx-auto">
             <ul>
@@ -14,9 +13,7 @@
         </div>
     @endif
 
-    <!-- Основной контент -->
     <div class="flex items-start mx-auto bg-white shadow-lg rounded-lg p-6 mt-8" style="max-width: 1000px;">
-        <!-- Блок аватара с возможностью открытия модального окна -->
         <div class="relative w-48 h-48 bg-gray-200 rounded-full overflow-hidden shadow-md mr-10 cursor-pointer transition duration-300 transform hover:scale-105"
              onclick="toggleAvatarModal(true);" title="Нажмите для выбора аватара">
             @if(Auth::user()->avatar)
@@ -26,31 +23,29 @@
             @endif
         </div>
 
-        <!-- Информация о пользователе -->
         <div class="space-y-8 flex-grow">
             <div class="grid grid-cols-2 gap-6">
                 <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
                     <label class="text-gray-500 text-sm">Имя</label>
                     <p class="text-xl font-semibold text-gray-800">{{ Auth::user()->name }}</p>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
                     <label class="text-gray-500 text-sm">Отчество</label>
                     <p class="text-lg font-semibold text-gray-800">{{ Auth::user()->patronymic }}</p>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
                     <label class="text-gray-500 text-sm">Email</label>
                     <p class="text-lg font-semibold text-gray-800">{{ Auth::user()->email }}</p>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
                     <label class="text-gray-500 text-sm">Телефон</label>
                     <p class="text-lg font-semibold text-gray-800">{{ Auth::user()->phone ?? 'Не указан' }}</p>
                 </div>
             </div>
 
-            <!-- Кнопки редактирования и смены пароля -->
             <div class="pt-4 flex space-x-4">
                 <button onclick="toggleEditProfileModal(true);" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-md shadow-md transition duration-300 transform hover:scale-105">
                     Редактировать профиль
@@ -62,7 +57,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно для выбора аватара -->
     <div id="avatarModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Выберите аватар</h3>
@@ -83,7 +77,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно для смены пароля -->
     <div id="passwordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Сменить пароль</h3>
@@ -109,7 +102,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно для редактирования профиля -->
     <div id="editProfileModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Редактировать профиль</h3>
@@ -149,8 +141,7 @@
         function toggleEditProfileModal(show) {
             document.getElementById('editProfileModal').style.display = show ? 'flex' : 'none';
         }
-        
-        // Автоформатирование телефона
+
         function formatPhoneNumber(input) {
             const cleaned = input.value.replace(/\D/g, '');
             const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);

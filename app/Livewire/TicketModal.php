@@ -19,7 +19,7 @@ class TicketModal extends Component
 
     public string $title = '';
     public string $description = '';
-    public $image = null; // Позволяет загружать новые изображения
+    public $image = null;
     public int $price = 0;
     public int $itemId = 0;
 
@@ -27,7 +27,6 @@ class TicketModal extends Component
     public int $availableTickets = 0;
     public string $type = 'ticket';
 
-    // Слушатель для событий
     protected $listeners = ['openModal'];
 
     /**
@@ -38,47 +37,37 @@ class TicketModal extends Component
      */
     public function openModal(int $id, string $type = 'ticket'): void
 {
-    $this->resetData(); // Сброс состояния перед загрузкой новых данных
+    $this->resetData();
     $this->itemId = $id;
     $this->type = $type;
 
-    // Проверка роли текущего пользователя
     $this->isAdmin = auth()->user() && auth()->user()->role_id === 1;
 
-    // Загрузка данных для разных типов
+
     $item = $this->loadItem($id, $type);
 
     if ($item) {
-        // Корректный вызов метода populateItem
         $this->populateItem($item, $type);
-        $this->isOpen = true; // Открываем модальное окно
-        $this->isEditMode = false; // Режим по умолчанию — просмотр
+        $this->isOpen = true;
+        $this->isEditMode = false;
     } else {
         Log::error("Item not found with ID: $id or invalid type: $type");
-        $this->isOpen = false; // Оставляем окно закрытым
+        $this->isOpen = false;
     }
 }
 
-    /**
-     * Закрыть модальное окно
-     */
     public function closeModal(): void
     {
         $this->isOpen = false;
         $this->reset(['title', 'description', 'image', 'price', 'itemId', 'isEditMode']);
     }
 
-    /**
-     * Включить режим редактирования
-     */
+
     public function enableEditMode(): void
     {
         $this->isEditMode = true;
     }
 
-    /**
-     * Сохранить изменения карточки
-     */
     public function saveChanges(): void
     {
         try {
@@ -91,30 +80,23 @@ class TicketModal extends Component
                 session()->flash('error', 'Неверный тип элемента.');
                 return;
             }
-    
-            // Обновляем общие поля
+
             $item->title = $this->title;
             $item->description = $this->description;
             $item->price = $this->price;
-    
+
             $item->save();
-    
-            // Закрываем модальное окно
             $this->closeModal();
-    
-            // Обновляем данные в родительском компоненте
+
             $this->emitTo('tickets', 'refreshCards');
-    
+
             session()->flash('success', 'Изменения успешно сохранены!');
         } catch (\Exception $e) {
-            \Log::error('Ошибка сохранения изменений: ' . $e->getMessage());
+            Log::error('Ошибка сохранения изменений: ' . $e->getMessage());
             session()->flash('error', 'Ошибка сохранения изменений.');
         }
     }
 
-    /**
-     * Перейти к оплате
-     */
     public function goToCheckout(): void
     {
         if (!$this->itemId) {
@@ -130,11 +112,6 @@ class TicketModal extends Component
         }
     }
 
-    /**
-     * Получить информацию о местах
-     *
-     * @return \Illuminate\Support\Collection
-     */
     public function getSeatInfo()
     {
         if ($this->type === 'ticket') {
@@ -146,19 +123,11 @@ class TicketModal extends Component
         return collect();
     }
 
-    /**
-     * Рендеринг компонента
-     *
-     * @return \Illuminate\View\View
-     */
     public function render()
     {
         return view('livewire.ticket-modal');
     }
 
-    /**
-     * Сброс состояния перед загрузкой новых данных
-     */
     private function resetData(): void
     {
         $this->title = '';
@@ -169,13 +138,7 @@ class TicketModal extends Component
         $this->availableTickets = 0;
     }
 
-    /**
-     * Загрузка элемента в зависимости от типа
-     *
-     * @param int $id
-     * @param string $type
-     * @return mixed|null
-     */
+
     private function loadItem(int $id, string $type)
     {
         if ($type === 'ticket') {
@@ -187,12 +150,6 @@ class TicketModal extends Component
         return null;
     }
 
-    /**
-     * Заполнение данных элемента
-     *
-     * @param mixed $item
-     * @param string $type
-     */
     private function populateItem($item, string $type): void
 {
     $this->title = $item->title ?? '';
@@ -206,11 +163,7 @@ class TicketModal extends Component
     }
 }
 
-    /**
-     * Получить информацию о местах для билетов
-     *
-     * @return \Illuminate\Support\Collection
-     */
+
     private function getTicketSeatInfo()
     {
         $item = Card::with('tickets')->find($this->itemId);
@@ -226,11 +179,6 @@ class TicketModal extends Component
         return collect();
     }
 
-    /**
-     * Получить информацию о временных интервалах для аренды
-     *
-     * @return \Illuminate\Support\Collection
-     */
     private function getRentalSeatInfo()
     {
         $item = RentalCard::with('rentalTimes')->find($this->itemId);

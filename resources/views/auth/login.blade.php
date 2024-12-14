@@ -19,8 +19,7 @@
                 </div>
 
                 <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Войти</button>
-
-                <!-- Кнопки для входа через Google и Yandex -->
+                
                 <div class="mt-6">
                     <a href="{{ route('login.google') }}" class="w-full flex items-center justify-center border border-gray-300 text-gray-700 py-2 rounded-lg mb-3 hover:bg-gray-100 focus:outline-none">
                         <img src="/images/google.png" alt="Google" class="w-5 h-5 mr-2">

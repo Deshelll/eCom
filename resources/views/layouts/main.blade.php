@@ -31,13 +31,11 @@
         @endif
     </div>
 
-    <!-- Имя пользователя или надпись "Гость" -->
     <span class="text-gray-800 font-semibold text-lg">
         {{ Auth::check() ? Auth::user()->name : 'Гость' }}
     </span>
 </a>
 
-            <!-- Пункты меню -->
             <nav class="w-full">
                 <a href="{{ route('home') }}" class="block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-200 transition">Билеты</a>
                 <a href="{{ route('rental') }}" class="block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-200 transition">Аренда</a>
@@ -46,7 +44,6 @@
             </nav>
         </div>
 
-        <!-- Кнопка выхода, только если пользователь аутентифицирован -->
         @if(Auth::check())
             <form action="{{ route('logout') }}" method="POST" class="w-full mt-auto">
                 @csrf
@@ -60,7 +57,6 @@
         @endif
     </aside>
 
-    <!-- Основной контент -->
     <main class="flex-grow p-8 bg-gray-50 ml-4 rounded-lg shadow-md">
         @yield('content')
         {{ $slot ?? '' }}

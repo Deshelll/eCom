@@ -13,7 +13,6 @@
         </div>
     @endif
 
-    <!-- Сетка карточек -->
     <div class="grid grid-cols-3 gap-4 w-full max-w-6xl">
         @foreach ($tickets as $index => $ticket)
             <div class="card shadow-lg border-0 rounded-lg p-4 bg-white relative">
@@ -52,7 +51,6 @@
 
     </div>
 
-    <!-- Управление карточками -->
     <div class="flex items-center space-x-2 mt-6">
         <button type="button" wire:click="addTicket" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             + Добавить билет

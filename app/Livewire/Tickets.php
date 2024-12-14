@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Card as CardModel;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -17,35 +18,25 @@ class Tickets extends Component
 
     public function mount(): void
     {
-        // Загружаем все карточки при инициализации компонента
         $this->loadCards();
     }
 
-    /**
-     * Загружает список карточек
-     *
-     * @return void
-     */
+
     public function loadCards(): void
     {
         $this->cards = CardModel::all();
     }
 
-    /**
-     * Сохраняет новую карточку
-     *
-     * @return void
-     */
+
     public function saveTicket(): void
     {
         $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:500',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048', // Проверка для загрузки изображения
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        // Загружаем изображение, если оно присутствует
         $imagePath = $this->image ? $this->image->store('cards', 'public') : null;
 
         CardModel::create([
@@ -57,36 +48,27 @@ class Tickets extends Component
 
         $this->reset(['title', 'description', 'price', 'image']);
         session()->flash('success', 'Билет успешно добавлен!');
-        $this->loadCards(); // Перезагружаем список карточек
+        $this->loadCards();
     }
     public function deleteCard($cardId)
     {
         $card = CardModel::find($cardId);
-    
+
         if (!$card) {
             session()->flash('error', 'Карточка не найдена.');
             return;
         }
-    
-        // Удаление связанного изображения (если есть)
+
         if ($card->image) {
-            \Storage::disk('public')->delete($card->image);
+            Storage::disk('public')->delete($card->image);
         }
-    
-        // Удаление карточки
+
         $card->delete();
-    
-        // Обновление списка карточек
         $this->loadCards();
-    
+
         session()->flash('success', 'Карточка успешно удалена.');
     }
 
-    /**
-     * Метод для рендеринга компонента
-     *
-     * @return \Illuminate\View\View
-     */
     public function render()
     {
         return view('livewire.tickets')->layout('layouts.main');

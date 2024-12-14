@@ -15,17 +15,11 @@ class OrderTicket extends Model
     ];
 
 
-    /**
-     * Связь с заказом.
-     */
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * Связь с билетом.
-     */
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
