@@ -78,22 +78,32 @@ class TicketModal extends Component
     public function saveChanges(): void
     {
         try {
-            $card = Card::findOrFail($this->itemId);
-            $card->title = $this->title;
-            $card->description = $this->description;
-            $card->price = $this->price;
-
-            $card->save();
-
+            // Проверяем тип и загружаем соответствующую модель
+            if ($this->type === 'ticket') {
+                $item = Card::findOrFail($this->itemId);
+            } elseif ($this->type === 'rental') {
+                $item = RentalCard::findOrFail($this->itemId);
+            } else {
+                session()->flash('error', 'Неверный тип элемента.');
+                return;
+            }
+    
+            // Обновляем общие поля
+            $item->title = $this->title;
+            $item->description = $this->description;
+            $item->price = $this->price;
+    
+            $item->save();
+    
             // Закрываем модальное окно
             $this->closeModal();
-
+    
             // Обновляем данные в родительском компоненте
             $this->emitTo('tickets', 'refreshCards');
-
-            session()->flash('success', 'Карточка успешно обновлена!');
+    
+            session()->flash('success', 'Изменения успешно сохранены!');
         } catch (\Exception $e) {
-            Log::error('Ошибка сохранения изменений карточки: ' . $e->getMessage());
+            \Log::error('Ошибка сохранения изменений: ' . $e->getMessage());
             session()->flash('error', 'Ошибка сохранения изменений.');
         }
     }
@@ -180,17 +190,17 @@ class TicketModal extends Component
      * @param string $type
      */
     private function populateItem($item, string $type): void
-    {
-        $this->title = $item->title ?? '';
-        $this->description = $item->description ?? '';
-        $this->image = $item->image ?? '';
-        $this->price = $item->price ?? 0;
+{
+    $this->title = $item->title ?? '';
+    $this->description = $item->description ?? '';
+    $this->image = $item->image ?? '';
+    $this->price = $item->price ?? 0;
 
-        if ($type === 'ticket') {
-            $this->totalTickets = $item->tickets->total_tickets ?? 0;
-            $this->availableTickets = $item->tickets->available_tickets ?? 0;
-        }
+    if ($type === 'ticket') {
+        $this->totalTickets = $item->tickets->total_tickets ?? 0;
+        $this->availableTickets = $item->tickets->available_tickets ?? 0;
     }
+}
 
     /**
      * Получить информацию о местах для билетов
