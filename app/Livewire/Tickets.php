@@ -59,6 +59,28 @@ class Tickets extends Component
         session()->flash('success', 'Билет успешно добавлен!');
         $this->loadCards(); // Перезагружаем список карточек
     }
+    public function deleteCard($cardId)
+    {
+        $card = CardModel::find($cardId);
+    
+        if (!$card) {
+            session()->flash('error', 'Карточка не найдена.');
+            return;
+        }
+    
+        // Удаление связанного изображения (если есть)
+        if ($card->image) {
+            \Storage::disk('public')->delete($card->image);
+        }
+    
+        // Удаление карточки
+        $card->delete();
+    
+        // Обновление списка карточек
+        $this->loadCards();
+    
+        session()->flash('success', 'Карточка успешно удалена.');
+    }
 
     /**
      * Метод для рендеринга компонента

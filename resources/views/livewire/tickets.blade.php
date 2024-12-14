@@ -2,12 +2,37 @@
     <!-- Список существующих карточек -->
     <div class="grid grid-cols-3 gap-4 mb-6">
         @foreach ($cards as $card)
-            @livewire('card-create', ['card' => $card], key($card->id))
+            <div class="relative border rounded p-6 bg-white overflow-hidden">
+                @livewire('card-create', ['card' => $card], key($card->id), ['class' => 'shadow-none'])
+
+                <!-- Крестик в квадратике -->
+                @if (auth()->check() && auth()->user()->role_id === 1)
+                    <button 
+                        wire:click="deleteCard({{ $card->id }})" 
+                        onclick="return confirm('Вы уверены, что хотите удалить этот билет?')" 
+                        class="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 flex items-center justify-center rounded hover:bg-red-600 z-10">
+                        ✖
+                    </button>
+                @endif
+            </div>
         @endforeach
     </div>
 
+    <!-- Сообщения об успехе и ошибке -->
+    @if (session()->has('success'))
+        <div class="bg-green-500 text-white p-2 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="bg-red-500 text-white p-2 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <!-- Форма для добавления нового билета -->
-    @if (auth()->user() && auth()->user()->role_id === 1) <!-- Проверка на роль администратора -->
+    @if (auth()->check() && auth()->user()->role_id === 1)
         <div class="p-6 bg-white shadow rounded-md">
             <h3 class="text-lg font-semibold mb-4">Добавить новый билет</h3>
             <form wire:submit.prevent="saveTicket">
