@@ -65,12 +65,14 @@
                             Сохранить
                         </button>
                     @else
-                        <!-- Кнопка для перехода в режим редактирования -->
-                        <button type="button"
-                                wire:click="enableEditMode"
-                                class="px-6 py-3 text-lg rounded bg-gray-300 hover:bg-gray-400 font-semibold">
-                            Изменить
-                        </button>
+                        @if ($isAdmin)
+                            <!-- Кнопка для перехода в режим редактирования -->
+                            <button type="button"
+                                    wire:click="enableEditMode"
+                                    class="px-6 py-3 text-lg rounded bg-gray-300 hover:bg-gray-400 font-semibold">
+                                Изменить
+                            </button>
+                        @endif
                     @endif
 
                     <!-- Кнопка покупки -->

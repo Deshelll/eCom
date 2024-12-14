@@ -12,6 +12,7 @@ use Livewire\WithFileUploads;
 class TicketModal extends Component
 {
     use WithFileUploads;
+    public bool $isAdmin = false;
 
     public bool $isOpen = false;
     public bool $isEditMode = false;
@@ -36,24 +37,27 @@ class TicketModal extends Component
      * @param string $type
      */
     public function openModal(int $id, string $type = 'ticket'): void
-    {
-        $this->resetData(); // Сброс состояния перед загрузкой новых данных
-        $this->itemId = $id;
-        $this->type = $type;
+{
+    $this->resetData(); // Сброс состояния перед загрузкой новых данных
+    $this->itemId = $id;
+    $this->type = $type;
 
-        // Загрузка данных для разных типов
-        $item = $this->loadItem($id, $type);
+    // Проверка роли текущего пользователя
+    $this->isAdmin = auth()->user() && auth()->user()->role_id === 1;
 
-        if ($item) {
-            // Корректный вызов метода populateItem
-            $this->populateItem($item, $type);
-            $this->isOpen = true; // Открываем модальное окно
-            $this->isEditMode = false; // Режим по умолчанию — просмотр
-        } else {
-            Log::error("Item not found with ID: $id or invalid type: $type");
-            $this->isOpen = false; // Оставляем окно закрытым
-        }
+    // Загрузка данных для разных типов
+    $item = $this->loadItem($id, $type);
+
+    if ($item) {
+        // Корректный вызов метода populateItem
+        $this->populateItem($item, $type);
+        $this->isOpen = true; // Открываем модальное окно
+        $this->isEditMode = false; // Режим по умолчанию — просмотр
+    } else {
+        Log::error("Item not found with ID: $id or invalid type: $type");
+        $this->isOpen = false; // Оставляем окно закрытым
     }
+}
 
     /**
      * Закрыть модальное окно
